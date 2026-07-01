@@ -1,6 +1,6 @@
 {
   "name": "@scriptpipe/core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TypeScript-native pipeline organization for Node.js: turn loose scripts into layered pipelines with named assets, derived execution order, and simple steps.",
   "keywords": [
     "pipeline",
@@ -18,7 +18,7 @@
   "homepage": "https://scriptpipe.dev",
   "repository": {
     "type": "git",
-    "url": "https://github.com/scottpreston/scriptpipe.git"
+    "url": "git+https://github.com/scottpreston/scriptpipe.git"
   },
   "type": "module",
   "main": "./dist/index.cjs",
