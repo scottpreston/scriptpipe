@@ -1,0 +1,32 @@
+# Claude / agent config (never commit)
+CLAUDE.md
+**/CLAUDE.md
+.claude/
+**/.claude/
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Test / coverage
+coverage/
+.vitest/
+
+# Env (keep the example)
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

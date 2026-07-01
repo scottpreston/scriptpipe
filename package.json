@@ -1,0 +1,28 @@
+{
+  "name": "scriptpipe-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ScriptPipe monorepo — TypeScript-native pipeline organization for Node.js.",
+  "license": "MIT",
+  "author": "Scott Preston",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scottpreston/scriptpipe.git"
+  },
+  "workspaces": [
+    "packages/*",
+    "examples/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

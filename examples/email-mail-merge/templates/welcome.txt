@@ -1,0 +1,10 @@
+Subject: Welcome to Acme, {{firstName}}!
+
+Hi {{firstName}},
+
+Thanks for signing up on behalf of {{company}}. Your account is on the {{plan}} plan,
+and everything is ready to go.
+
+If you have any questions, just reply to this email.
+
+— The Acme Team

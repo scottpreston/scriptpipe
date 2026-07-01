@@ -1,0 +1,14 @@
+{
+  "name": "@scriptpipe/example-email-mail-merge",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Example ScriptPipe pipeline: an email list flows source -> bronze -> silver -> gold to produce mail-merged emails, ready for a consuming app to send.",
+  "type": "module",
+  "scripts": {
+    "start": "tsx run.ts",
+    "clean": "rm -rf data/bronze data/silver data/gold"
+  },
+  "dependencies": {
+    "@scriptpipe/core": "*"
+  }
+}
