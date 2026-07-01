@@ -12,9 +12,6 @@ JavaScript functions. Not a platform, not a notebook, not a visual builder.
 
 ## Install
 
-> **⚠️ Not on npm yet — coming soon.** The command below is how you'll install it once
-> published. For now, clone the repo and run the workspace locally.
-
 ```bash
 npm install @scriptpipe/core
 ```
@@ -104,9 +101,9 @@ module.exports = definePipeline('orders', { assets: { /* … */ }, steps: { /* �
 
 ## Packages
 
-npm-workspaces monorepo under `packages/*`. Nothing is published to npm yet — **coming soon.**
+npm-workspaces monorepo under `packages/*`.
 
-- **`@scriptpipe/core`** — define, validate, order, run, and read/write filesystem assets. _(built, not yet published)_
+- **`@scriptpipe/core`** — define, validate, order, run, and read/write filesystem assets. _(available on npm)_
 - **`@scriptpipe/cli`** — command-line runner. _(planned)_
 
 The filesystem helpers live in `@scriptpipe/core` for now and may move to a dedicated
