@@ -1,6 +1,6 @@
 {
   "name": "@scriptpipe/core",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "TypeScript-native pipeline organization for Node.js: turn loose scripts into layered pipelines with named assets, derived execution order, and simple steps.",
   "keywords": [
     "pipeline",

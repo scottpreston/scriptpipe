@@ -1,12 +1,14 @@
 import { ValidationError } from './errors';
-import { LAYERS, type PipelineConfig } from './types';
+import { LAYERS, type PartitionedStep, type PipelineConfig } from './types';
 
 /**
  * Validate a pipeline definition, throwing {@link ValidationError} on the first problem.
  *
  * Checks: a non-empty name; assets/steps are objects; every asset has a valid layer and a
  * non-empty uri; every step has a run function and reads/writes arrays; every referenced
- * asset exists; and no asset is written by more than one step (a single producer per asset).
+ * asset exists; no asset is written by more than one step (a single producer per asset); and
+ * for a partitioned step, a key function, a positive-integer concurrency, and exactly one
+ * collection (`entries: true`) write asset.
  */
 export function validatePipeline(name: string, config: PipelineConfig): void {
   if (typeof name !== 'string' || name.trim() === '') {
@@ -68,5 +70,45 @@ export function validatePipeline(name: string, config: PipelineConfig): void {
       }
       producerOf.set(assetName, stepName);
     }
+
+    if ('partition' in step && step.partition !== undefined) {
+      validatePartitioned(name, stepName, step as PartitionedStep, assets);
+    }
+  }
+}
+
+/** Checks specific to a fan-out step: partition/key functions, concurrency, one collection output. */
+function validatePartitioned(
+  name: string,
+  stepName: string,
+  step: PartitionedStep,
+  assets: PipelineConfig['assets'],
+): void {
+  if (typeof step.partition !== 'function') {
+    throw new ValidationError(
+      `Step "${stepName}" in pipeline "${name}" has a partition that is not a function.`,
+    );
+  }
+  if (typeof step.key !== 'function') {
+    throw new ValidationError(
+      `Partitioned step "${stepName}" in pipeline "${name}" must have a key function.`,
+    );
+  }
+  if (
+    step.concurrency !== undefined &&
+    (!Number.isInteger(step.concurrency) || step.concurrency < 1)
+  ) {
+    throw new ValidationError(
+      `Partitioned step "${stepName}" in pipeline "${name}" has invalid concurrency ` +
+        `${step.concurrency}; it must be a positive integer.`,
+    );
+  }
+
+  const collections = step.writes.filter((assetName) => assets[assetName]?.entries);
+  if (collections.length !== 1) {
+    throw new ValidationError(
+      `Partitioned step "${stepName}" in pipeline "${name}" must write exactly one collection ` +
+        `asset (entries: true), found ${collections.length}.`,
+    );
   }
 }

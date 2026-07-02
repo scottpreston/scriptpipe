@@ -3,6 +3,7 @@ import {
   CycleError,
   ValidationError,
   definePipeline,
+  partitioned,
   type Asset,
   type Layer,
 } from '../src/index';
@@ -131,5 +132,96 @@ describe('definePipeline', () => {
 
     expect(thrown).toBeInstanceOf(CycleError);
     expect((thrown as CycleError).cycle.length).toBeGreaterThan(0);
+  });
+
+  it('accepts a valid partitioned step', () => {
+    const p = definePipeline('fanout', {
+      assets: {
+        src: { layer: 'bronze', uri: 'src.json' },
+        out: { layer: 'silver', uri: 'out', entries: true },
+      },
+      steps: {
+        expand: partitioned<number>({
+          reads: ['src'],
+          writes: ['out'],
+          concurrency: 2,
+          partition: () => [1, 2, 3],
+          key: (n) => String(n),
+          run: (n) => ({ n }),
+        }),
+      },
+    });
+    expect(p.order).toEqual(['expand']);
+  });
+
+  it('throws when a partitioned step writes no collection asset', () => {
+    expect(() =>
+      definePipeline('bad', {
+        assets: { out: { layer: 'silver', uri: 'out.json' } },
+        steps: {
+          expand: partitioned<number>({
+            reads: [],
+            writes: ['out'],
+            partition: () => [1],
+            key: (n) => String(n),
+            run: (n) => ({ n }),
+          }),
+        },
+      }),
+    ).toThrow(/exactly one collection/);
+  });
+
+  it('throws when a partitioned step writes more than one collection asset', () => {
+    expect(() =>
+      definePipeline('bad', {
+        assets: {
+          a: { layer: 'silver', uri: 'a', entries: true },
+          b: { layer: 'silver', uri: 'b', entries: true },
+        },
+        steps: {
+          expand: partitioned<number>({
+            reads: [],
+            writes: ['a', 'b'],
+            partition: () => [1],
+            key: (n) => String(n),
+            run: (n) => ({ n }),
+          }),
+        },
+      }),
+    ).toThrow(/exactly one collection/);
+  });
+
+  it('throws on a non-positive-integer concurrency', () => {
+    expect(() =>
+      definePipeline('bad', {
+        assets: { out: { layer: 'silver', uri: 'out', entries: true } },
+        steps: {
+          expand: partitioned<number>({
+            reads: [],
+            writes: ['out'],
+            concurrency: 0,
+            partition: () => [1],
+            key: (n) => String(n),
+            run: (n) => ({ n }),
+          }),
+        },
+      }),
+    ).toThrow(/positive integer/);
+  });
+
+  it('throws when a partitioned step has no key function', () => {
+    expect(() =>
+      definePipeline('bad', {
+        assets: { out: { layer: 'silver', uri: 'out', entries: true } },
+        steps: {
+          expand: {
+            reads: [],
+            writes: ['out'],
+            partition: () => [1],
+            run: () => ({}),
+          } as never,
+        },
+      }),
+    ).toThrow(/key function/);
   });
 });

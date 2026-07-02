@@ -1,0 +1,6 @@
+[
+  { "id": "doc-1", "title": "Intro", "text": "the quick brown fox jumps over the lazy dog" },
+  { "id": "doc-2", "title": "Chant", "text": "buffalo buffalo buffalo buffalo herd" },
+  { "id": "doc-3", "title": "Terse", "text": "one" },
+  { "id": "doc-4", "title": "Mixed", "text": "alpha beta beta gamma gamma gamma" }
+]

@@ -1,0 +1,14 @@
+{
+  "name": "@scriptpipe/example-word-stats",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Example ScriptPipe pipeline: fan out per-document word analysis into a silver collection, then aggregate to a gold summary. Demonstrates partitioned steps, collection assets, and bounded concurrency.",
+  "type": "module",
+  "scripts": {
+    "start": "tsx run.ts",
+    "clean": "rm -rf data/bronze data/silver data/gold"
+  },
+  "dependencies": {
+    "@scriptpipe/core": "*"
+  }
+}

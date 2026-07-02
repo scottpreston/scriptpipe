@@ -1,0 +1,4 @@
+# Generated pipeline layers — only data/source is committed
+data/bronze/
+data/silver/
+data/gold/
